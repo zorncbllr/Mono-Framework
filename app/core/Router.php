@@ -46,8 +46,7 @@ class Router
         $reflection = new ReflectionClass($this->controller);
 
         foreach ($reflection->getMethods() as $method) {
-            $routeIndex = sizeof($method->getAttributes()) - 1;
-            $attribute = $method->getAttributes()[$routeIndex];
+            $attribute = $method->getAttributes('Route')[0];
             $attr = $attribute->newInstance();
 
             if ($_SERVER["REQUEST_METHOD"] === $attr->method) {
@@ -74,7 +73,8 @@ class Router
 
         Controller::HandleError($this->errorController);
     }
-    protected function formatPath(string $className): string
+
+    private function formatPath(string $className): string
     {
         return __DIR__ . "/../controllers/$className.php";
     }
